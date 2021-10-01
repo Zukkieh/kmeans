@@ -50,7 +50,7 @@ public class Kmeans {
                     ic.y = averageY;
                 }
             }
-            if(equalCount == items.size()){
+            if(equalCount == initialCentroids.size()){
                 isEqualThanLastOne = true;
             }
             iteration++;
