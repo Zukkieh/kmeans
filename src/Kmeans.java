@@ -26,9 +26,9 @@ public class Kmeans {
         int iteration = 0;
         while(iteration < iterationsQuantity && !isEqualThanLastOne) {
             for (Item item : items) {
-                ArrayList<Integer> distances = new ArrayList<Integer>(initialCentroids.size()); 
+                ArrayList<Double> distances = new ArrayList<Double>(initialCentroids.size()); 
                 for (Item ic : initialCentroids) {
-                    distances.add((int)findDistance(item.x, ic.x, item.y, ic.y));
+                    distances.add(findDistance(item.x, ic.x, item.y, ic.y));
                 }
                 var obj = Collections.min(distances);
                 var index = distances.indexOf(obj);
@@ -67,8 +67,8 @@ public class Kmeans {
         }
     }
 
-    private long findDistance(double x1, double x2, double y1, double y2) {
-        return Math.round(Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2)));
+    private double findDistance(double x1, double x2, double y1, double y2) {
+        return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
     }
 
 }
