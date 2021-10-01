@@ -12,7 +12,11 @@ public class Kmeans {
     }
 
     public void runKmeans() {
-        List<Item> initialCentroids = items.stream().filter(item -> item.isCentroidInicial).toList();
+        List<Item> initialCentroids = items
+            .stream()
+            .filter(item -> item.isCentroidInicial)
+            .map(item -> new Item(item.id, item.x, item.y, item.isCentroidInicial))
+            .toList();
 
         for(int i = 0; i < initialCentroids.size(); i++) {
             initialCentroids.get(i).group = i+1;
@@ -31,6 +35,7 @@ public class Kmeans {
                 item.group = index + 1;
                 distances.clear();
             }
+            var equalCount = 0;
             for (Item ic : initialCentroids) {
                 var groupedItems = items.stream().filter(item -> item.group == ic.group).toList();
                 
@@ -38,12 +43,15 @@ public class Kmeans {
                 var averageY = Math.round(groupedItems.stream().mapToDouble(m -> m.y).average().getAsDouble());
 
                 if(averageX == ic.x && averageY == ic.y) {
-                    isEqualThanLastOne = true;
+                    equalCount++;
                 }
                 else{
                     ic.x = averageX;
                     ic.y = averageY;
                 }
+            }
+            if(equalCount == items.size()){
+                isEqualThanLastOne = true;
             }
             iteration++;
         }
