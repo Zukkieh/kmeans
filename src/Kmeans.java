@@ -14,12 +14,12 @@ public class Kmeans {
     public void runKmeans() {
         List<Item> initialCentroids = items
             .stream()
-            .filter(item -> item.isCentroidInicial)
-            .map(item -> new Item(item.id, item.x, item.y, item.isCentroidInicial))
+            .filter(item -> item.isCentroidInicial())
+            .map(item -> new Item(item.getId(), item.getId(), item.getY(), item.isCentroidInicial()))
             .toList();
 
         for(int i = 0; i < initialCentroids.size(); i++) {
-            initialCentroids.get(i).group = i+1;
+            initialCentroids.get(i).setGroup(i+1);
         }
 
         boolean isEqualThanLastOne = false;
@@ -28,40 +28,43 @@ public class Kmeans {
             for (Item item : items) {
                 ArrayList<Double> distances = new ArrayList<Double>(initialCentroids.size()); 
                 for (Item ic : initialCentroids) {
-                    distances.add(findDistance(item.x, ic.x, item.y, ic.y));
+                    distances.add(findDistance(item.getX(), ic.getX(), item.getY(), ic.getY()));
                 }
-                var obj = Collections.min(distances);
-                var index = distances.indexOf(obj);
-                item.group = index + 1;
+                double obj = Collections.min(distances);
+                int index = distances.indexOf(obj);
+                item.setLastgroup(item.getGroup());
+                item.setGroup(index+1);
                 distances.clear();
             }
-            var equalCount = 0;
             for (Item ic : initialCentroids) {
-                var groupedItems = items.stream().filter(item -> item.group == ic.group).toList();
+                var groupedItems = items.stream().filter(item -> item.getGroup() == ic.getGroup()).toList();
                 
-                var averageX = Math.round(groupedItems.stream().mapToDouble(m -> m.x).average().getAsDouble());
-                var averageY = Math.round(groupedItems.stream().mapToDouble(m -> m.y).average().getAsDouble());
+                int averageX = Math.round(groupedItems.stream().mapToDouble(m -> m.x).average().getAsDouble());
+                int averageY = Math.round(groupedItems.stream().mapToDouble(m -> m.y).average().getAsDouble());
 
-                if(averageX == ic.x && averageY == ic.y) {
-                    equalCount++;
-                }
-                else{
-                    ic.x = averageX;
-                    ic.y = averageY;
+                if(averageX != ic.getX() || averageY != ic.getY()) {
+                    ic.setX(averageX);
+                    ic.setY(averageY);
                 }
             }
-            if(equalCount == initialCentroids.size()){
+            
+            int equalCount = 0;
+            for (int i = 0; i < items.size();i++) {
+            	if(items.get(i).getLastgroup() == items.get(i).getGroup())
+            		equalCount++;
+            }
+            if(equalCount == items.size()){
                 isEqualThanLastOne = true;
             }
             iteration++;
         }
         for (Item item : initialCentroids) {
-            System.out.println("CENTROIDES " + item.id + " " + item.x + " " + item.y);
+            System.out.println("CENTROIDES " + item.getId() + " " + item.getX() + " " + item.getY());
         }
         for (Item ic : initialCentroids) {
-            System.out.print("Grupo "+ ic.group + ": { ");
+            System.out.print("Grupo "+ ic.getGroup() + ": { ");
             for (Item item : items) {
-                if(item.group == ic.group) System.out.print(item.id + " ");
+                if(item.getGroup() == ic.getGroup()) System.out.print(item.getId() + " ");
             }
             System.out.print("}\n");
         }

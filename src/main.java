@@ -2,7 +2,7 @@ import java.util.ArrayList;
 public class main {
 
 	public static void main(String[] args) {
-		var rows = new ArrayList<Item>() {
+		ArrayList<Item> rows = new ArrayList<Item>() {
 		    {
 			add(new Item(1, 0, 5, true));
 			add(new Item(2, 16, 18, false));
@@ -17,7 +17,7 @@ public class main {
 
 		    }
 		};
-		var kmeans = new Kmeans(rows, 30);
+		Kmeans kmeans = new Kmeans(rows, 30);
 
 		kmeans.runKmeans();
 	}
