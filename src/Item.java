@@ -47,6 +47,7 @@ public class Item {
         this.y = y;
         this.isCentroidInicial = isCentroidInicial;
         this.group = 0;
+        this.lastgroup = 0;
     }
 
     public void setGroup(int group) {

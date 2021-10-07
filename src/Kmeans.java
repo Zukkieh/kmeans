@@ -15,7 +15,7 @@ public class Kmeans {
         List<Item> initialCentroids = items
             .stream()
             .filter(item -> item.isCentroidInicial())
-            .map(item -> new Item(item.getId(), item.getId(), item.getY(), item.isCentroidInicial()))
+            .map(item -> new Item(item.getId(), item.getX(), item.getY(), item.isCentroidInicial()))
             .toList();
 
         for(int i = 0; i < initialCentroids.size(); i++) {
@@ -37,10 +37,10 @@ public class Kmeans {
                 distances.clear();
             }
             for (Item ic : initialCentroids) {
-                var groupedItems = items.stream().filter(item -> item.getGroup() == ic.getGroup()).toList();
+            	List<Item> groupedItems = items.stream().filter(item -> item.getGroup() == ic.getGroup()).toList();
                 
-                int averageX = Math.round(groupedItems.stream().mapToDouble(m -> m.x).average().getAsDouble());
-                int averageY = Math.round(groupedItems.stream().mapToDouble(m -> m.y).average().getAsDouble());
+                int averageX = (int) Math.round(groupedItems.stream().mapToDouble(m -> m.getX()).average().getAsDouble());
+                int averageY = (int) Math.round(groupedItems.stream().mapToDouble(m -> m.getY()).average().getAsDouble());
 
                 if(averageX != ic.getX() || averageY != ic.getY()) {
                     ic.setX(averageX);
@@ -59,12 +59,12 @@ public class Kmeans {
             iteration++;
         }
         for (Item item : initialCentroids) {
-            System.out.println("CENTROIDES " + item.getId() + " " + item.getX() + " " + item.getY());
+            System.out.println("CENTROIDES " + item.getId() + " {X: " + item.getX() + ", Y: " + item.getY()+ '}') ;
         }
         for (Item ic : initialCentroids) {
             System.out.print("Grupo "+ ic.getGroup() + ": { ");
             for (Item item : items) {
-                if(item.getGroup() == ic.getGroup()) System.out.print(item.getId() + " ");
+                if(item.getGroup() == ic.getGroup()) System.out.print(item.getId() + ", ");
             }
             System.out.print("}\n");
         }
